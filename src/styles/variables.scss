@@ -1,0 +1,94 @@
+// ==================== 色彩系统 ====================
+// 主色系
+$primary: #2563eb;          // 主色 - 蓝色
+$primary-light: #3b82f6;    // 浅蓝
+$primary-lighter: #60a5fa;  // 更浅蓝
+$primary-dark: #1e40af;     // 深蓝
+
+// 成功、警告、危险色
+$success: #10b981;          // 成功 - 绿色
+$warning: #f59e0b;          // 警告 - 橙色
+$danger: #ef4444;           // 危险 - 红色
+$info: #06b6d4;             // 信息 - 青色
+
+// 中立色
+$white: #ffffff;
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-800: #1f2937;
+$gray-900: #111827;
+
+// ==================== 侧边栏色彩 ====================
+$menuBg: #1f2937;           // 菜单背景 - 深灰
+$menuHover: #374151;        // 菜单悬浮
+$subMenuBg: #111827;        // 子菜单背景 - 更深
+$subMenuHover: #2d3748;     // 子菜单悬浮
+$menuText: #e5e7eb;         // 菜单文字 - 浅灰
+$menuActiveText: #3b82f6;   // 激活文字 - 蓝色
+$subMenuActiveText: #60a5fa;// 子菜单激活 - 浅蓝
+
+// ==================== 间距系统 ====================
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+$spacing-2xl: 24px;
+$spacing-3xl: 32px;
+$spacing-4xl: 40px;
+
+// ==================== 圆角系统 ====================
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-2xl: 24px;
+
+// ==================== 阴影系统 ====================
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+$shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+// ==================== 尺寸系统 ====================
+$sideBarWidth: 200px;       // 侧边栏宽度
+$navbarHeight: 60px;        // 导航栏高度
+$headerHeight: 60px;        // 顶部高度
+
+// ==================== 过渡系统 ====================
+$transition-fast: 150ms;
+$transition-base: 300ms;
+$transition-slow: 500ms;
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+    // 色彩
+    primary: $primary;
+    primaryLight: $primary-light;
+    success: $success;
+    warning: $warning;
+    danger: $danger;
+    info: $info;
+    // 侧边栏
+    menuText: $menuText;
+    menuActiveText: $menuActiveText;
+    subMenuActiveText: $subMenuActiveText;
+    menuBg: $menuBg;
+    menuHover: $menuHover;
+    subMenuBg: $subMenuBg;
+    subMenuHover: $subMenuHover;
+    sideBarWidth: $sideBarWidth;
+    // 间距
+    spacingLg: $spacing-lg;
+    spacingXl: $spacing-xl;
+    // 阴影
+    shadowLg: $shadow-lg;
+}

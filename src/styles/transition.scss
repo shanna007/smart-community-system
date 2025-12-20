@@ -1,0 +1,82 @@
+@import './variables.scss';
+
+// global transition css
+
+/* fade */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity $transition-base;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
+/* fade-transform */
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+  transition: all $transition-slow;
+}
+
+.fade-transform-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* breadcrumb transition */
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all $transition-slow;
+}
+
+.breadcrumb-enter,
+.breadcrumb-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.breadcrumb-move {
+  transition: all $transition-slow;
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
+}
+
+/* smooth slide transitions */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all $transition-base ease;
+}
+
+.slide-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* expand collapse */
+.expand-enter-active,
+.expand-leave-active {
+  transition: all $transition-base ease;
+}
+
+.expand-enter {
+  opacity: 0;
+  transform: scaleY(0.5);
+}
+
+.expand-leave-to {
+  opacity: 0;
+  transform: scaleY(0.5);
+}
