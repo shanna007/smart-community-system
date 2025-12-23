@@ -24,13 +24,6 @@ export const constantRoutes = [{
     },
 
     {
-        path: '/404',
-        component: () =>
-            import ('@/views/404'),
-        hidden: true
-    },
-
-    {
         path: '/',
         component: Layout,
         redirect: '/dashboard',
@@ -52,7 +45,6 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
     const newRouter = createRouter()
     router.matcher = newRouter.matcher // reset router
