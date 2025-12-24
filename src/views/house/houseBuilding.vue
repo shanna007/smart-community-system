@@ -20,6 +20,50 @@
           @click="addBtn">新增</el-button>
       </el-form-item>
     </el-form>
+    <!-- 表格列表 -->
+    <el-table :height="tableHeight" :data="tableList" border stripe>
+      <el-table-column prop="name" label="楼栋名称"></el-table-column>
+      <el-table-column prop="orderNum" label="序号"></el-table-column>
+      <el-table-column prop="type" label="楼栋类型">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.type == '0'" type="success" size="small">普通房</el-tag>
+          <el-tag v-if="scope.row.type == '1'" type="danger" size="small">电梯房</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column width="180" label="操作">
+        <template slot-scope="scope">
+          <el-button v-if="hasPerm('sys:houseBuilding:edit')" icon="el-icon-edit" type="primary"
+            @click="editBtn(scope.row)" size="small">编辑</el-button>
+          <el-button v-if="hasPerm('sys:houseBuilding:delete')" icon="el-icon-delete" type="danger"
+            @click="deleteBtn(scope.row)" size="small">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页 -->
+    <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page.sync="parm.currentPage"
+      :page-sizes="[10, 20, 40, 80, 100]" :page-size="parm.pageSize" layout="total, sizes, prev, pager, next, jumper"
+      :total="parm.total" background>
+    </el-pagination>
+    <!-- 新增楼栋弹框 -->
+    <sys-dialog :title="addDialog.title" :height="addDialog.height" :width="addDialog.width"
+      :visible="addDialog.visible" @onClose="onClose" @onConfirm="onConfirm">
+      <template slot="content">
+        <el-form :model="addModle" ref="addRef" :rules="rules" label-width="80px" :inline="true" size="small">
+          <el-form-item prop="name" label="楼栋名称">
+            <el-input v-model="addModle.name"></el-input>
+          </el-form-item>
+          <el-form-item prop="type" label="楼栋类型">
+            <el-select v-model="addModle.type">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="楼栋序号">
+            <el-input type="number" v-model="addModle.orderNum"></el-input>
+          </el-form-item>
+        </el-form>
+      </template>
+    </sys-dialog>
   </el-main>
 </template>
 
@@ -46,6 +90,21 @@ export default {
             message: "请选择楼栋类型",
           },
         ],
+      },
+      //新增或编辑表单数据
+      addModle: {
+        buildId: "",
+        editType: "", //0新增 1：编辑
+        type: "", //0：普通房 1：电梯房
+        name: "",
+        orderNum: "",
+      },
+      //定义弹框属性
+      addDialog: {
+        title: "",
+        height: 200,
+        width: 630,
+        visible: false,
       },
       //表格高度
       tableHeight: 0,
