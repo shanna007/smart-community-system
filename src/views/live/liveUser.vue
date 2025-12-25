@@ -223,6 +223,57 @@ export default {
   components: { SysDialog },
   data() {
     return {
+      //绑定车位列表高度
+      parkTableHeight: 0,
+      //绑定车位参数
+      assignParkParm: {
+        parkId: "",
+        userId: "",
+      },
+      //车位弹框属性
+      parkDialog: {
+        title: "",
+        height: 400,
+        width: 900,
+        visible: false,
+      },
+      //车位列表
+      parkList: [],
+      //车位查询参数
+      parkParms: {
+        currentPage: 1,
+        pageSize: 10,
+        parkName: "",
+        parkStatus: "0", //0未使用 1 已使用
+        parkType: "",
+        total: 0,
+      },
+      //绑定房屋列表高度
+      assignTableHeight: 0,
+      //绑定房屋提交的数据
+      assignHoseParm: {
+        houseId: "",
+        userId: "",
+      },
+      //绑定房屋弹框属性
+      assignHouseDialog: {
+        title: "",
+        height: 400,
+        width: 1050,
+        visible: false,
+      },
+      //房屋数据域
+      houseList: [],
+      //获取房屋列表的参数
+      houseParms: {
+        buildNme: "",
+        status: "0",
+        unitName: "",
+        houseNum: "",
+        currentPage: 1,
+        pageSize: 10,
+        total: 0,
+      },
       //表格的高度
       tableHeight: 0,
       //居民列表
@@ -332,6 +383,87 @@ export default {
     searchBtn() {
       this.getList();
     },
+    //绑定车位页数改变触发
+    assignParkCurrentChange(val) {
+      this.parkParms.currentPage = val;
+      this.getAssignParkList();
+    },
+    //绑定车位页容量改变触发
+    assignParkSizeChange(val) {
+      this.parkParms.pageSize = val;
+      this.getAssignParkList();
+    },
+    //绑定车位点击
+    getAssignParkId(row) {
+      this.assignParkParm.parkId = row.parkId;
+      console.log(this.assignParkParm);
+    },
+    //绑定车位弹框确认
+    async parkOnConfirm() {
+      //验证是否选择车位
+      if (!this.assignParkParm.parkId) {
+        this.$message.warning("请选择车位！");
+        return;
+      }
+      let res = await assignParkSaveApi(this.assignParkParm);
+      if (res && res.code == 200) {
+        this.$message.success(res.msg);
+        this.parkDialog.visible = false;
+        //刷新列表
+        this.getList();
+      }
+    },
+    //绑定车位弹框关闭
+    parkOnClose() {
+      this.parkDialog.visible = false;
+    },
+    //绑定房屋列表页数改变
+    assignHouseChange(val) {
+      this.houseParms.currentPage = val;
+      this.getAssignHoseList();
+    },
+    //绑定房屋列表页容量改变事件
+    assignHouseSize(val) {
+      this.houseParms.pageSize = val;
+      this.getAssignHoseList();
+    },
+    //绑定房屋列表搜索事件
+    assignHouseSearchBtn() {
+      this.getAssignHoseList();
+    },
+    //绑定房屋列表重置事件
+    assignHouseResetBtn() {
+      //清空搜索框数据
+      this.houseParms.buildNme = "";
+      this.houseParms.unitName = "";
+      this.houseParms.houseNum = "";
+      this.getAssignHoseList();
+    },
+    //房屋选择事件
+    getCurrentRow(row) {
+      console.log(row);
+      this.assignHoseParm.houseId = row.houseId;
+      console.log(this.assignHoseParm);
+    },
+    // 绑定房屋关闭事件
+    assignHoseClose() {
+      this.assignHouseDialog.visible = false;
+    },
+    //绑定房屋确认事件
+    async assignHoseConfirm() {
+      if (!this.assignHoseParm.houseId) {
+        this.$message.warning("请选择要绑定的房屋!");
+        return;
+      }
+      //数据提交
+      let res = await assignSaveApi(this.assignHoseParm);
+      if (res && res.code == 200) {
+        //刷新列表
+        this.getList();
+        this.assignHouseDialog.visible = false;
+        this.$message.success(res.msg);
+      }
+    },
     //编辑居民
     async editBtn(row) {
       //清空表单
@@ -368,6 +500,112 @@ export default {
           this.$message.success(res.msg);
         }
       }
+    },
+    //退车位
+    async leavePark(row) {
+      console.log(row);
+      if (!row.liveStatue) {
+        this.$message.warning("该租户暂时无可退的车位!");
+        return;
+      }
+      let confirm = await this.$myconfirm("确定退车位吗？");
+      if (confirm) {
+        let res = await returnParkApi({
+          userId: row.userId,
+          parkId: row.parkId,
+        });
+        if (res && res.code == 200) {
+          //刷新列表
+          this.getList();
+          //信息提示
+          this.$message.success(res.msg);
+        }
+      }
+    },
+    //退房
+    async leaveHose(row) {
+      console.log(row);
+      if (!row.useStatus) {
+        this.$message.warning("该租户暂时无可退的房屋!");
+        return;
+      }
+      let confirm = await this.$myconfirm("确定退房吗？");
+      if (confirm) {
+        let res = await returnHouseApi({
+          userId: row.userId,
+          houseId: row.houseId,
+        });
+        if (res && res.code == 200) {
+          //刷新列表
+          this.getList();
+          //信息提示
+          this.$message.success(res.msg);
+        }
+      }
+    },
+    //绑定车位列表重置事件
+    parkResetBtn() {
+      this.parkParms.parkName = "";
+      //获取车位列表
+      this.getAssignParkList();
+    },
+    //绑定车位查询按钮
+    parkSearchBtn() {
+      //获取车位列表
+      this.getAssignParkList();
+    },
+    //绑定车位
+    async assignPark(row) {
+      console.log(row);
+      if (row.parkName) {
+        this.$message.warning("已绑定车位，不能重复绑定!");
+        return;
+      }
+      //清空数据
+      this.assignParkParm.parkId = "";
+      this.parkParms.parkName = "";
+      this.assignParkParm.userId = row.userId;
+      //获取车位列表
+      this.getAssignParkList();
+      //弹框属性设置
+      this.parkDialog.title = "为【" + row.loginName + "】绑定车位";
+      this.parkDialog.visible = true;
+      this.$nextTick(() => {
+        this.parkTableHeight = window.innerHeight - 620;
+      });
+    },
+    async getAssignParkList() {
+      let res = await getParkListApi(this.parkParms);
+      if (res && res.code == 200) {
+        console.log(res);
+        //把数据赋值给车位列表
+        this.parkList = res.data.records;
+        this.parkParms.total = res.data.total;
+      }
+    },
+    //绑定房屋
+    async assignHose(row) {
+      console.log(row);
+      if (row.houseNum) {
+        this.$message.warning("已经绑定房屋，不能重复绑定!");
+        return;
+      }
+      //清空搜索框数据
+      this.houseParms.buildNme = "";
+      this.houseParms.unitName = "";
+      this.houseParms.houseNum = "";
+      this.assignHoseParm.houseId = "";
+      this.assignHoseParm.userId = "";
+      //获取未绑定的房屋列表
+      this.getAssignHoseList();
+      //弹框属性设置
+      this.assignHouseDialog.title = "为【" + row.loginName + "】绑定房屋";
+      this.assignHouseDialog.visible = true;
+      this.$nextTick(() => {
+        this.assignTableHeight = window.innerHeight - 620;
+      });
+      //设置绑定人
+      this.assignHoseParm.userId = row.userId;
     },
     async getAssignHoseList() {
       let res = await getHouseListApi(this.houseParms);
