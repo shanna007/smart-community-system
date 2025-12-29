@@ -30,7 +30,7 @@
     <el-card class="box-card welcome-card">
       <div slot="header" class="clearfix card-header">
         <i class="el-icon-star-on"></i>
-        <span class="header-title">欢迎来到物业管理系统</span>
+        <span class="header-title">欢迎来到社区智慧生活服务平台</span>
       </div>
       <div class="content">
         <div class="section-title">
