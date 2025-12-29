@@ -121,6 +121,7 @@ export default {
         //表格数据赋值
         console.log(res);
         this.tableList = res.data.records;
+        this.parms.total = res.data.total;
       }
     },
   },
